@@ -48,7 +48,7 @@ with st.container():
     col_logo, col_titulo = st.columns([1, 4])
     with col_logo:
         # REEMPLAZA ESTA URL CON EL LOGO OFICIAL DE LA UGEL
-        logo_url = "https://drive.google.com/file/d/1FT53UNbaxC92he5RggJ29s403ZUkOdac/view?usp=sharing" 
+        logo_url = "https://ugelcusco.gob.pe/ws/wp-content/uploads/2026/02/LOGOOOO.fw_.png" 
         st.image(logo_url, width=150)
     
     with col_titulo:
