@@ -13,7 +13,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-st.title("📋 Seguimiento de Adjudicación de Plazas")
+st.title("Seguimiento de Adjudicación de Plazas - UGEL Cusco")
 st.markdown(f"**Estado:** <span class='status-viva'>● EN VIVO</span>", unsafe_allow_html=True)
 
 # --- CONFIGURACIÓN DE LA BASE ---
