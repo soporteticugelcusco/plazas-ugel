@@ -36,9 +36,6 @@ def estilo_fila(row):
     elif valor == 'DISPONIBLE':
         # Verde claro para toda la fila
         return ['background-color: #d1fae5; color: #065f46'] * len(row)
-    elif valor == 'RESERVADA':
-        # Amarillo claro para toda la fila
-        return ['background-color: #fef3c7; color: #92400e'] * len(row)
     return [''] * len(row)
 
 # 3. CABECERA
@@ -73,7 +70,7 @@ except Exception as e:
     st.error(f"Error al cargar datos o aplicar estilos: {e}")
 
 # 5. PIE DE PÁGINA Y REFRESCO
-st.markdown('<div class="footer">© 2026 UGEL Cusco - Equipo de Informática. El tablero se refresca automáticamente.</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">© UGEL Cusco - Equipo de Informática 2026 </br>.</br>Este tablero es meramente informativo.</br>La adjudicación oficial se realiza en acto público </div>', unsafe_allow_html=True)
 
 time.sleep(3)
 st.rerun()
