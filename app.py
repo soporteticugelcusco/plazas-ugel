@@ -41,8 +41,9 @@ with st.container():
         # Puedes usar una URL o un archivo local 'logo.png'
         st.image("https://ugelcusco.gob.pe/ws/wp-content/uploads/2026/02/LOGOOOO.fw_.png", width=140)
     with col_titulo:
-        st.title("Sistema de Seguimiento de Plazas Vacantes")
-        st.markdown("<span class='status-live'>● ACTUALIZACIÓN EN VIVO (CADA 3s)</span>", unsafe_allow_html=True)
+        st.subheader("UNIDAD DE GESTIÓN EDUCATIVA LOCAL CUSCO")
+        st.title("ADJUDICACIÓN DE PLAZAS CONTRATO DOCENTE")
+        st.markdown("<span class='status-live'>● ACTUALIZACIÓN (CADA 3s)</span>", unsafe_allow_html=True)
 
 st.divider()
 
@@ -55,8 +56,6 @@ def color_estado(val):
         color = 'background-color: #d1fae5; color: #065f46' # Verde claro
     elif str(val).upper() == 'ADJUDICADA':
         color = 'background-color: #fee2e2; color: #991b1b' # Rojo claro
-    elif str(val).upper() == 'RESERVADA':
-        color = 'background-color: #fef3c7; color: #92400e' # Amarillo claro
     return color
 
 # 5. CARGA DE DATOS (TTL = 3 segundos)
@@ -92,7 +91,9 @@ except Exception as e:
 # 6. PIE DE PÁGINA
 st.markdown("""
     <div class="footer">
-        © 2026 UGEL - Soporte Técnico e Informática. La información mostrada es referencial y se actualiza automáticamente.
+        © 2026 UGEL Cusco- Equipo de Informática. 
+        </br>Este tablero es meramente informativo. 
+        </br>La adjudicación oficial se realiza en acto público
     </div>
     """, unsafe_allow_html=True)
 
