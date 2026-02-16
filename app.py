@@ -47,16 +47,37 @@ with st.container():
 
 st.divider()
 
-# 4. FUNCIÓN PARA COLOREAR FILAS
+# 4. FUNCIÓN PARA COLOREAR FILAS--- FUNCIÓN DE COLOREADO ACTUALIZADA ---
 def color_estado(val):
-    # Asume que tu columna se llama 'Estado'
-    # Ajusta los nombres 'DISPONIBLE' o 'ADJUDICADA' según tu Excel
+    # Convertimos a string, quitamos espacios y ponemos en mayúsculas
+    estado = str(val).strip().upper()
+    
     color = ''
-    if str(val).upper() == 'DISPONIBLE':
-        color = 'background-color: #d1fae5; color: #065f46' # Verde claro
-    elif str(val).upper() == 'ADJUDICADA':
-        color = 'background-color: #fee2e2; color: #991b1b' # Rojo claro
+    if estado == 'DISPONIBLE':
+        color = 'background-color: #d1fae5; color: #065f46' # Verde
+    elif estado == 'ADJUDICADA':
+        color = 'background-color: #fee2e2; color: #991b1b' # Rojo
+    elif estado == 'RESERVADA':
+        color = 'background-color: #fef3c7; color: #92400e' # Amarillo
     return color
+
+# --- APLICAR AL DATAFRAME ---
+try:
+    df = cargar_datos(URL_SHEET)
+    
+    # ... (tu código de búsqueda aquí) ...
+
+    # Aplicamos el estilo específicamente a la columna 'ESTADO'
+    # Nota: Asegúrate de que el nombre 'ESTADO' coincida exactamente con tu Excel
+    if 'ESTADO' in df.columns:
+        styled_df = df.style.map(color_estado, subset=['ESTADO'])
+    else:
+        styled_df = df
+
+    st.dataframe(styled_df, use_container_width=True, height=550, hide_index=True)
+
+except Exception as e:
+    st.error(f"Error al aplicar colores: {e}")
 
 # 5. CARGA DE DATOS (TTL = 3 segundos)
 URL_SHEET = "https://docs.google.com/spreadsheets/d/1E1bGvrOn6vmYZxIlRYZfqdQ8DiYXJBtH/edit?usp=sharing&ouid=102196281229150253520&rtpof=true&sd=true"
