@@ -19,7 +19,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # 2. FUNCIONES DE DATOS
-@st.cache_data(ttl=3)
+@st.cache_data(ttl=2)
 def cargar_datos(url):
     csv_url = url.replace('/edit?usp=sharing', '/export?format=csv')
     return pd.read_csv(csv_url)
