@@ -48,12 +48,12 @@ with st.container():
     col_logo, col_titulo = st.columns([1, 4])
     with col_logo:
         # REEMPLAZA ESTA URL CON EL LOGO OFICIAL DE LA UGEL
-        logo_url = "https://drive.google.com/file/d/14_GSsOGqIY36Gtjsp2FoRQcjXmx_nw8G/view?usp=sharing" 
+        logo_url = "https://drive.google.com/file/d/1FT53UNbaxC92he5RggJ29s403ZUkOdac/view?usp=sharing" 
         st.image(logo_url, width=150)
     
     with col_titulo:
-        st.subheader("UNIDAD DE GESTIÓN EDUCATIVA LOCAL")
-        st.title("Sistema de Visualización de Plazas Vacantes")
+        st.subheader("UNIDAD DE GESTIÓN EDUCATIVA LOCAL CUSCO")
+        st.title("ADJUDICACIÓN DE PLAZAS CONTRATO DOCENTE")
         st.markdown("<span class='status-live'>● Transmisión en vivo (CADA 3s)</span>", unsafe_allow_html=True)
 
 st.divider()
