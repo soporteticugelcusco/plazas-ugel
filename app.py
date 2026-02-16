@@ -4,7 +4,7 @@ import time
 
 # 1. CONFIGURACIÓN DE PÁGINA
 st.set_page_config(
-    page_title="Sistema de Adjudicación de Plazas - En Vivo",
+    page_title="Adjudicación de Plazas - Contrata Docente - En Vivo",
     page_icon="📋",
     layout="wide"
 )
