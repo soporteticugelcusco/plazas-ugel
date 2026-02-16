@@ -2,14 +2,15 @@ import streamlit as st
 import pandas as pd
 import time
 
-# 1. CONFIGURACIÓN DE PÁGINA
+# ==========================================
+# 1. CONFIGURACIÓN Y ESTILOS
+# ==========================================
 st.set_page_config(
-    page_title="Adjudicación de Plazas - Contrata Docente - UGEL Cusco",
+    page_title="Adjudicación de Plazas - UGEL Cusco",
     page_icon="🎓",
     layout="wide"
 )
 
-# 2. ESTILOS CSS PARA EL DISEÑO Y PIE DE PÁGINA
 st.markdown("""
     <style>
     .stApp { background-color: #ffffff; }
@@ -34,11 +35,32 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. CABECERA INSTITUCIONAL
+# ==========================================
+# 2. DEFINICIÓN DE FUNCIONES (Primero se definen)
+# ==========================================
+
+@st.cache_data(ttl=3)
+def cargar_datos(url):
+    # Transformamos el link para descarga directa en CSV
+    csv_url = url.replace('/edit?usp=sharing', '/export?format=csv')
+    return pd.read_csv(csv_url)
+
+def color_estado(val):
+    estado = str(val).strip().upper()
+    if estado == 'DISPONIBLE':
+        return 'background-color: #d1fae5; color: #065f46' # Verde
+    elif estado == 'ADJUDICADA':
+        return 'background-color: #fee2e2; color: #991b1b' # Rojo
+    elif estado == 'RESERVADA':
+        return 'background-color: #fef3c7; color: #92400e' # Amarillo
+    return ''
+
+# ==========================================
+# 3. CABECERA
+# ==========================================
 with st.container():
     col_logo, col_titulo = st.columns([1, 5])
     with col_logo:
-        # Puedes usar una URL o un archivo local 'logo.png'
         st.image("https://ugelcusco.gob.pe/ws/wp-content/uploads/2026/02/LOGOOOO.fw_.png", width=140)
     with col_titulo:
         st.subheader("UNIDAD DE GESTIÓN EDUCATIVA LOCAL CUSCO")
@@ -47,77 +69,47 @@ with st.container():
 
 st.divider()
 
-# 4. FUNCIÓN PARA COLOREAR FILAS--- FUNCIÓN DE COLOREADO ACTUALIZADA ---
-def color_estado(val):
-    # Convertimos a string, quitamos espacios y ponemos en mayúsculas
-    estado = str(val).strip().upper()
-    
-    color = ''
-    if estado == 'DISPONIBLE':
-        color = 'background-color: #d1fae5; color: #065f46' # Verde
-    elif estado == 'ADJUDICADA':
-        color = 'background-color: #fee2e2; color: #991b1b' # Rojo
-    elif estado == 'RESERVADA':
-        color = 'background-color: #fef3c7; color: #92400e' # Amarillo
-    return color
-
-# --- APLICAR AL DATAFRAME ---
-try:
-    df = cargar_datos(URL_SHEET)
-    
-    # ... (tu código de búsqueda aquí) ...
-
-    # Aplicamos el estilo específicamente a la columna 'ESTADO'
-    # Nota: Asegúrate de que el nombre 'ESTADO' coincida exactamente con tu Excel
-    if 'ESTADO' in df.columns:
-        styled_df = df.style.map(color_estado, subset=['ESTADO'])
-    else:
-        styled_df = df
-
-    st.dataframe(styled_df, use_container_width=True, height=550, hide_index=True)
-
-except Exception as e:
-    st.error(f"Error al aplicar colores: {e}")
-
-# 5. CARGA DE DATOS (TTL = 3 segundos)
-URL_SHEET = "https://docs.google.com/spreadsheets/d/1E1bGvrOn6vmYZxIlRYZfqdQ8DiYXJBtH/edit?usp=sharing&ouid=102196281229150253520&rtpof=true&sd=true"
-
-@st.cache_data(ttl=3)
-def cargar_datos(url):
-    csv_url = url.replace('/edit?usp=sharing', '/export?format=csv')
-    return pd.read_csv(csv_url)
+# ==========================================
+# 4. LÓGICA PRINCIPAL (Carga, Filtro y Visualización)
+# ==========================================
+URL_SHEET = "https://docs.google.com/spreadsheets/d/1E1bGvrOn6vmYZxIlRYZfqdQ8DiYXJBtH/edit?usp=sharing"
 
 try:
+    # Carga
     df = cargar_datos(URL_SHEET)
 
-    # Buscador interactivo
+    # Buscador
     busqueda = st.text_input("🔍 Buscar por Institución Educativa:", placeholder="Escriba para filtrar...")
-
+    
     if busqueda:
         df = df[df.astype(str).apply(lambda x: x.str.contains(busqueda, case=False)).any(axis=1)]
 
-    # APLICAR ESTILOS A LA TABLA
-    # Si tienes una columna 'Estado', se aplicará el color a esa celda
-    if 'Estado' in df.columns:
-        styled_df = df.style.applymap(color_estado, subset=['Estado'])
+    # Aplicar Colores
+    # He usado 'ESTADO' en mayúsculas porque así aparece en tu imagen
+    if 'ESTADO' in df.columns:
+        styled_df = df.style.map(color_estado, subset=['ESTADO'])
+    elif 'Estado' in df.columns:
+        styled_df = df.style.map(color_estado, subset=['Estado'])
     else:
         styled_df = df
 
-    # Mostrar la tabla estilizada
+    # Mostrar Tabla
     st.dataframe(styled_df, use_container_width=True, height=550, hide_index=True)
 
 except Exception as e:
     st.warning("🔄 Sincronizando con la base de datos de plazas...")
+    st.info("Asegúrese de que el archivo de Google Sheets tenga los permisos de 'Cualquier persona con el enlace'.")
 
-# 6. PIE DE PÁGINA
+# ==========================================
+# 5. PIE DE PÁGINA Y REFRESCO
+# ==========================================
 st.markdown("""
     <div class="footer">
-        © 2026 UGEL Cusco- Equipo de Informática. 
-        </br>Este tablero es meramente informativo. 
-        </br>La adjudicación oficial se realiza en acto público
+        © 2026 UGEL Cusco - Equipo de Informática. <br>
+        Este tablero es meramente informativo. La adjudicación oficial se realiza en acto público.
     </div>
     """, unsafe_allow_html=True)
 
-# 7. LOGICA DE REFRESCO
+# Pausa de 3 segundos antes de reiniciar la app para el efecto "En Vivo"
 time.sleep(3)
 st.rerun()
