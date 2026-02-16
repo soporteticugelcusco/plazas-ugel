@@ -18,7 +18,7 @@
 
 
 
-**Ve a share.streamlit.io.**
+**Ve a share.streamlit.io.**   https://share.streamlit.io/
 
 
 
@@ -243,6 +243,7 @@ Auto-actualización: El comando st.rerun() al final del código hace que la pág
 
 
 ---------------
+
 
 
 
