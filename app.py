@@ -18,7 +18,7 @@ st.markdown(f"**Estado:** <span class='status-viva'>● EN VIVO</span>", unsafe_
 
 # --- CONFIGURACIÓN DE LA BASE ---
 # Reemplaza con tu link de Google Sheets
-URL_SHEET = "TU_LINK_DE_GOOGLE_SHEETS_AQUÍ"
+URL_SHEET = "https://docs.google.com/spreadsheets/d/1E1bGvrOn6vmYZxIlRYZfqdQ8DiYXJBtH/edit?usp=sharing&ouid=102196281229150253520&rtpof=true&sd=true"
 
 # --- CARGA DE DATOS CON CACHÉ DE 3 SEGUNDOS ---
 @st.cache_data(ttl=3)
