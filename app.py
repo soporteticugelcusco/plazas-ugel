@@ -93,8 +93,8 @@ except Exception as e:
 # 5. PIE DE PÁGINA PERSONALIZADO
 st.markdown("""
     <div class="footer">
-        <p>© 2026 - Área de Informática / Recursos Humanos - UGEL Cusco. 
-        Este tablero es meramente informativo. La adjudicación oficial se realiza en el acto público.</p>
+        <p>© 2026 - Equipo de Informática - UGEL Cusco. 
+        Este tablero es meramente informativo. La adjudicación oficial se realiza en acto público.</p>
     </div>
     """, unsafe_allow_html=True)
 
