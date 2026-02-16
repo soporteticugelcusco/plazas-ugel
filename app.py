@@ -47,14 +47,14 @@ st.markdown("""
 with st.container():
     col_logo, col_titulo = st.columns([1, 4])
     with col_logo:
-        # REEMPLAZA ESTA URL CON EL LOGO OFICIAL DE LA UGEL
+        # URL CON EL LOGO OFICIAL DE LA UGEL
         logo_url = "https://ugelcusco.gob.pe/ws/wp-content/uploads/2026/02/LOGOOOO.fw_.png" 
         st.image(logo_url, width=150)
     
     with col_titulo:
         st.subheader("UNIDAD DE GESTIÓN EDUCATIVA LOCAL CUSCO")
         st.title("ADJUDICACIÓN DE PLAZAS CONTRATO DOCENTE")
-        st.markdown("<span class='status-live'>● Transmisión en vivo (CADA 3s)</span>", unsafe_allow_html=True)
+        st.markdown("<span class='status-live'>● actualizacion (CADA 3s)</span>", unsafe_allow_html=True)
 
 st.divider()
 
@@ -72,7 +72,7 @@ try:
     # Filtros rápidos
     c1, c2 = st.columns([2, 1])
     with c1:
-        busqueda = st.text_input("🔍 Buscar por Institución, Cargo o Distrito:", placeholder="Ej. Colegio Nacional...")
+        busqueda = st.text_input("🔍 Buscar por Institución:", placeholder="Ej. Colegio Nacional...")
     with c2:
         # Si tienes una columna llamada 'Estado', esto ayuda mucho
         if 'Estado' in df.columns:
@@ -88,9 +88,9 @@ try:
     st.dataframe(df, use_container_width=True, height=500, hide_index=True)
 
 except Exception as e:
-    st.info("🔄 Sincronizando datos con la base central... espere un momento.")
+    st.info("🔄 Sincronizando datos con la base de datos central... espere un momento.")
 
-# 5. PIE DE PÁGINA PERSONALIZADO
+# 5. PIE DE PÁGINA 
 st.markdown("""
     <div class="footer">
         <p>© 2026 - Equipo de Informática - UGEL Cusco. 
