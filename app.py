@@ -49,7 +49,7 @@ with st.container():
         st.markdown("<span class='status-live'>● ACTUALIZACIÓN (CADA 3s)</span>", unsafe_allow_html=True)
 
 # 4. PROCESAMIENTO DE TABLA
-URL_SHEET = "https://docs.google.com/spreadsheets/d/1E1bGvrOn6vmYZxIlRYZfqdQ8DiYXJBtH/edit?usp=sharing"
+URL_SHEET = "https://docs.google.com/spreadsheets/d/1X78ctrqUH58bpjj57ibWucgpGrrw4NAG/edit?usp=sharing&ouid=102196281229150253520&rtpof=true&sd=true"
 
 try:
     df = cargar_datos(URL_SHEET)
