@@ -58,7 +58,7 @@ try:
     df = cargar_datos(URL_SHEET)
 
     # --- SECCIÓN DE FILTROS ---
-    st.write("### 🔍 Filtrar Listado")
+    st.write("### 🔍 Busqueda Avanzada")
     c1, c2, c3 = st.columns([1, 1, 1])
     
     with c1:
