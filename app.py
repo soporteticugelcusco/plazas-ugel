@@ -36,7 +36,7 @@ def estilo_fila(row):
         if valor == 'ADJUDICADA':
             return ['background-color: #fee2e2; color: #991b1b'] * len(row)
         elif valor == 'DISPONIBLE':
-            return ['background-color: #d1fae5; color: #065f46'] * len(row)
+            return ['background-color: ; color: #065f46'] * len(row)
     return [''] * len(row)
 
 # 3. CABECERA
@@ -85,7 +85,7 @@ try:
 
     with c3:
         # Buscador General
-        busqueda = st.text_input("Búsqueda por IE o DNI:", placeholder="Escriba aquí...")
+        busqueda = st.text_input("Búsqueda por IE:", placeholder="Escriba aquí...")
         if busqueda:
             df = df[df.astype(str).apply(lambda x: x.str.contains(busqueda, case=False)).any(axis=1)]
 
