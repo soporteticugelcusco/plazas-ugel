@@ -85,7 +85,7 @@ try:
 
     with c3:
         # Buscador General
-        busqueda = st.text_input("Búsqueda por IE:", placeholder="Escriba aquí...")
+        busqueda = st.text_input("Búsqueda por IE y/o Especialidad:", placeholder="Escriba aquí...")
         if busqueda:
             df = df[df.astype(str).apply(lambda x: x.str.contains(busqueda, case=False)).any(axis=1)]
 
@@ -100,6 +100,6 @@ except Exception as e:
     st.error(f"Error en la sincronización: {e}")
 
 # 5. PIE DE PÁGINA Y REFRESCO
-st.markdown('<div class="footer">© 2026 UGEL Cusco - El tablero se refresca automáticamente cada 3s.</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">© 2026 Equipo de Informatica - UGEL Cusco </br>.</br>Este tablero es meramente informativo.</br>La adjudicación oficial se realiza en acto público </div>', unsafe_allow_html=True)
 time.sleep(3)
 st.rerun()
