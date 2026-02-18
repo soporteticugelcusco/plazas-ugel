@@ -3,9 +3,9 @@ import pandas as pd
 import time
 
 # 1. CONFIGURACIÓN DE PÁGINA
-st.set_page_config(page_title="Adjudicación UGEL Cusco", page_icon="🎓", layout="wide")
+st.set_page_config(page_title="Publicación Final - Plazas Contrato Docente ", page_icon="🎓", layout="wide")
 
-# Estilos CSS (Mantenemos el pie de página y el parpadeo)
+# Estilos CSS (pie de página y el parpadeo)
 st.markdown("""
     <style>
     .footer {
@@ -24,7 +24,7 @@ def cargar_datos(url):
     csv_url = url.replace('/edit?usp=sharing', '/export?format=csv')
     return pd.read_csv(csv_url)
 
-# --- ESTA ES LA FUNCIÓN CLAVE PARA PINTAR TODA LA FILA ---
+# --- FUNCIÓN CLAVE PINTAR TODA LA FILA ---
 def estilo_fila(row):
     # Buscamos la columna de estado ignorando mayúsculas/minúsculas
     col_estado = 'ESTADO' if 'ESTADO' in row.index else 'Estado'
@@ -45,8 +45,9 @@ with st.container():
         st.image("https://ugelcusco.gob.pe/ws/wp-content/uploads/2026/02/LOGOOOO.fw_.png", width=140)
     with col_titulo:
         st.subheader("UNIDAD DE GESTIÓN EDUCATIVA LOCAL CUSCO")
-        st.title("ADJUDICACIÓN DE PLAZAS CONTRATO DOCENTE")
-        st.markdown("<span class='status-live'>● ACTUALIZACIÓN EN VIVO (CADA 3s)</span>", unsafe_allow_html=True)
+        st.subheader("DECRETO SUPREMO N° 022-2025-MINEDU")
+        st.title("PUBLICACION FINAL DE PLAZAS VACANTES PARA EL PROCESO DE CONTRATACIÓN DOCENTE 2026")
+        st.markdown("<span class='status-live'>● ACTUALIZACIÓN (CADA 3s)</span>", unsafe_allow_html=True)
 
 # 4. PROCESAMIENTO DE TABLA
 URL_SHEET = "https://docs.google.com/spreadsheets/d/1E1bGvrOn6vmYZxIlRYZfqdQ8DiYXJBtH/edit?usp=sharing"
