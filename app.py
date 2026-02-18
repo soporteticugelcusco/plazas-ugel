@@ -2,10 +2,14 @@ import streamlit as st
 import pandas as pd
 import time
 
-# 1. CONFIGURACIÓN DE PÁGINA
-st.set_page_config(page_title="Publicación Final - Plazas Contrato Docente ", page_icon="🎓", layout="wide")
+# 1. CONFIGURACIÓN (Icono personalizado con URL)
+st.set_page_config(
+    page_title="Adjudicación UGEL Cusco", 
+    page_icon="https://ugelcusco.gob.pe/ws/wp-content/uploads/2026/02/LOGOOOO.fw_.png", 
+    layout="wide"
+)
 
-# Estilos CSS (pie de página y el parpadeo)
+# Estilos CSS
 st.markdown("""
     <style>
     .footer {
@@ -18,24 +22,19 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. FUNCIONES DE DATOS
+# 2. FUNCIONES
 @st.cache_data(ttl=3)
 def cargar_datos(url):
     csv_url = url.replace('/edit?usp=sharing', '/export?format=csv')
     return pd.read_csv(csv_url)
 
-# --- FUNCIÓN CLAVE PINTAR TODA LA FILA ---
 def estilo_fila(row):
-    # Buscamos la columna de estado ignorando mayúsculas/minúsculas
     col_estado = 'ESTADO' if 'ESTADO' in row.index else 'Estado'
     valor = str(row[col_estado]).strip().upper()
-    
     if valor == 'ADJUDICADA':
-        # Rojo claro para toda la fila
-        return ['background-color: #FF0000; color: #000000'] * len(row)
+        return ['background-color: #fee2e2; color: #991b1b'] * len(row)
     elif valor == 'DISPONIBLE':
-        # Verde claro para toda la fila
-        return ['background-color: ; color: #000000'] * len(row)
+        return ['background-color: #d1fae5; color: #065f46'] * len(row)
     return [''] * len(row)
 
 # 3. CABECERA
@@ -45,32 +44,53 @@ with st.container():
         st.image("https://ugelcusco.gob.pe/ws/wp-content/uploads/2026/02/LOGOOOO.fw_.png", width=140)
     with col_titulo:
         st.subheader("UNIDAD DE GESTIÓN EDUCATIVA LOCAL CUSCO")
-        st.title("PUBLICACION FINAL DE PLAZAS VACANTES PARA EL PROCESO DE CONTRATACIÓN DOCENTE 2026")
-        st.markdown("<span class='status-live'>● ACTUALIZACIÓN (CADA 3s)</span>", unsafe_allow_html=True)
+        st.title("ADJUDICACIÓN DE PLAZAS CONTRATO DOCENTE")
+        st.markdown("<span class='status-live'>● ACTUALIZACIÓN EN VIVO (CADA 3s)</span>", unsafe_allow_html=True)
 
-# 4. PROCESAMIENTO DE TABLA
+st.divider()
+
+# 4. PROCESAMIENTO DE DATOS Y FILTROS
 URL_SHEET = "https://docs.google.com/spreadsheets/d/1X78ctrqUH58bpjj57ibWucgpGrrw4NAG/edit?usp=sharing&ouid=102196281229150253520&rtpof=true&sd=true"
 
 try:
     df = cargar_datos(URL_SHEET)
 
-    # Buscador
-    busqueda = st.text_input("🔍 Buscar por Institución Educativa, Nivel Educativo, Tipo IE:", placeholder="Escriba para filtrar...")
-    if busqueda:
-        df = df[df.astype(str).apply(lambda x: x.str.contains(busqueda, case=False)).any(axis=1)]
+    # --- SECCIÓN DE FILTROS ---
+    st.write("### 🔍 Filtrar Plazas")
+    c1, c2, c3 = st.columns([1, 1, 2])
+    
+    with c1:
+        # Filtro Nivel Educativo (Asegúrate que la columna se llame 'NIVEL')
+        col_nivel = 'NIVEL' if 'NIVEL' in df.columns else 'Nivel'
+        if col_nivel in df.columns:
+            lista_niveles = ["TODOS"] + sorted(df[col_nivel].dropna().unique().tolist())
+            nivel_sel = st.selectbox("Seleccione Nivel:", lista_niveles)
+            if nivel_sel != "TODOS":
+                df = df[df[col_nivel] == nivel_sel]
 
-    # --- APLICAR ESTILO A NIVEL DE FILA (axis=1) ---
-    # Esto asegura que toda la línea se pinte
+    with c2:
+        # Filtro Cargo (Asegúrate que la columna se llame 'CARGO')
+        col_cargo = 'CARGO' if 'CARGO' in df.columns else 'Cargo'
+        if col_cargo in df.columns:
+            lista_cargos = ["TODOS"] + sorted(df[col_cargo].dropna().unique().tolist())
+            cargo_sel = st.selectbox("Seleccione Cargo:", lista_cargos)
+            if cargo_sel != "TODOS":
+                df = df[df[col_cargo] == cargo_sel]
+
+    with c3:
+        # Buscador General
+        busqueda = st.text_input("Búsqueda Rápida (IE, Distrito, DNI):", placeholder="Escriba aquí...")
+        if busqueda:
+            df = df[df.astype(str).apply(lambda x: x.str.contains(busqueda, case=False)).any(axis=1)]
+
+    # --- APLICAR ESTILO Y MOSTRAR ---
     styled_df = df.style.apply(estilo_fila, axis=1)
-
-    # Mostrar la tabla
-    st.dataframe(styled_df, use_container_width=True, height=600, hide_index=True)
+    st.dataframe(styled_df, use_container_width=True, height=500, hide_index=True)
 
 except Exception as e:
-    st.error(f"Error al cargar datos o aplicar estilos: {e}")
+    st.warning("🔄 Sincronizando datos con la central...")
 
 # 5. PIE DE PÁGINA Y REFRESCO
-st.markdown('<div class="footer">© UGEL Cusco - Equipo de Informática 2026 </br>.</br>Este tablero es meramente informativo.</br>La adjudicación oficial se realiza en acto público </div>', unsafe_allow_html=True)
-
+st.markdown('<div class="footer">© 2026 UGEL Cusco - El tablero se refresca automáticamente cada 3s.</div>', unsafe_allow_html=True)
 time.sleep(3)
 st.rerun()
