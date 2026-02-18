@@ -45,7 +45,6 @@ with st.container():
         st.image("https://ugelcusco.gob.pe/ws/wp-content/uploads/2026/02/LOGOOOO.fw_.png", width=140)
     with col_titulo:
         st.subheader("UNIDAD DE GESTIÓN EDUCATIVA LOCAL CUSCO")
-        st.subheader("DECRETO SUPREMO N° 022-2025-MINEDU")
         st.title("PUBLICACION FINAL DE PLAZAS VACANTES PARA EL PROCESO DE CONTRATACIÓN DOCENTE 2026")
         st.markdown("<span class='status-live'>● ACTUALIZACIÓN (CADA 3s)</span>", unsafe_allow_html=True)
 
@@ -56,7 +55,7 @@ try:
     df = cargar_datos(URL_SHEET)
 
     # Buscador
-    busqueda = st.text_input("🔍 Buscar por Institución, Modalidad o Código:", placeholder="Escriba para filtrar...")
+    busqueda = st.text_input("🔍 Buscar por Institución Educativa, Nivel Educativo, Tipo IE:", placeholder="Escriba para filtrar...")
     if busqueda:
         df = df[df.astype(str).apply(lambda x: x.str.contains(busqueda, case=False)).any(axis=1)]
 
