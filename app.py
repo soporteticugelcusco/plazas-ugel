@@ -100,6 +100,6 @@ except Exception as e:
     st.error(f"Error en la sincronización: {e}")
 
 # 5. PIE DE PÁGINA Y REFRESCO
-st.markdown('<div class="footer">© 2026 Equipo de Informatica - UGEL Cusco </br>.</br>Este tablero es meramente informativo.</br>La adjudicación oficial se realiza en acto público </div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">© 2026 Equipo de Informatica - UGEL Cusco</br>Este tablero es meramente informativo.</br>La adjudicación oficial se realiza en acto público </div>', unsafe_allow_html=True)
 time.sleep(3)
 st.rerun()
