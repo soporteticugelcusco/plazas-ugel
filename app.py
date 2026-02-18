@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import time
 
-# 1. CONFIGURACIÓN (Icono personalizado con URL)
+# 1. CONFIGURACIÓN
 st.set_page_config(
     page_title="Adjudicación UGEL Cusco", 
     page_icon="https://ugelcusco.gob.pe/ws/wp-content/uploads/2026/02/LOGOOOO.fw_.png", 
@@ -29,12 +29,14 @@ def cargar_datos(url):
     return pd.read_csv(csv_url)
 
 def estilo_fila(row):
-    col_estado = 'ESTADO' if 'ESTADO' in row.index else 'Estado'
-    valor = str(row[col_estado]).strip().upper()
-    if valor == 'ADJUDICADA':
-        return ['background-color: #fee2e2; color: #991b1b'] * len(row)
-    elif valor == 'DISPONIBLE':
-        return ['background-color: #d1fae5; color: #065f46'] * len(row)
+    # Detección flexible de la columna de estado
+    col_estado = next((c for c in row.index if 'ESTADO' in c.upper()), None)
+    if col_estado:
+        valor = str(row[col_estado]).strip().upper()
+        if valor == 'ADJUDICADA':
+            return ['background-color: #fee2e2; color: #991b1b'] * len(row)
+        elif valor == 'DISPONIBLE':
+            return ['background-color: #d1fae5; color: #065f46'] * len(row)
     return [''] * len(row)
 
 # 3. CABECERA
@@ -49,46 +51,53 @@ with st.container():
 
 st.divider()
 
-# 4. PROCESAMIENTO DE DATOS Y FILTROS
-URL_SHEET = "https://docs.google.com/spreadsheets/d/1X78ctrqUH58bpjj57ibWucgpGrrw4NAG/edit?usp=sharing&ouid=102196281229150253520&rtpof=true&sd=true"
+# 4. PROCESAMIENTO Y FILTROS
+URL_SHEET = "https://docs.google.com/spreadsheets/d/1E1bGvrOn6vmYZxIlRYZfqdQ8DiYXJBtH/edit?usp=sharing"
 
 try:
     df = cargar_datos(URL_SHEET)
 
     # --- SECCIÓN DE FILTROS ---
-    st.write("### 🔍 Filtrar Plazas")
-    c1, c2, c3 = st.columns([1, 1, 2])
+    st.write("### 🔍 Filtrar Listado")
+    c1, c2, c3 = st.columns([1, 1, 1])
     
     with c1:
-        # Filtro Nivel Educativo (Asegúrate que la columna se llame 'NIVEL')
-        col_nivel = 'NIVEL' if 'NIVEL' in df.columns else 'Nivel'
-        if col_nivel in df.columns:
+        # Filtro NIVEL EDUCATIVO (Busca columnas que contengan 'NIVEL')
+        col_nivel = next((c for c in df.columns if 'NIVEL' in c.upper()), None)
+        if col_nivel:
             lista_niveles = ["TODOS"] + sorted(df[col_nivel].dropna().unique().tolist())
-            nivel_sel = st.selectbox("Seleccione Nivel:", lista_niveles)
+            nivel_sel = st.selectbox("Nivel Educativo:", lista_niveles)
             if nivel_sel != "TODOS":
                 df = df[df[col_nivel] == nivel_sel]
+        else:
+            st.warning("Columna 'NIVEL' no encontrada")
 
     with c2:
-        # Filtro Cargo (Asegúrate que la columna se llame 'CARGO')
-        col_cargo = 'CARGO' if 'CARGO' in df.columns else 'Cargo'
-        if col_cargo in df.columns:
+        # Filtro CARGO (Busca columnas que contengan 'CARGO')
+        col_cargo = next((c for c in df.columns if 'CARGO' in c.upper()), None)
+        if col_cargo:
             lista_cargos = ["TODOS"] + sorted(df[col_cargo].dropna().unique().tolist())
-            cargo_sel = st.selectbox("Seleccione Cargo:", lista_cargos)
+            cargo_sel = st.selectbox("Cargo:", lista_cargos)
             if cargo_sel != "TODOS":
                 df = df[df[col_cargo] == cargo_sel]
+        else:
+            st.warning("Columna 'CARGO' no encontrada")
 
     with c3:
         # Buscador General
-        busqueda = st.text_input("Búsqueda Rápida (IE, Distrito, DNI):", placeholder="Escriba aquí...")
+        busqueda = st.text_input("Búsqueda por IE o DNI:", placeholder="Escriba aquí...")
         if busqueda:
             df = df[df.astype(str).apply(lambda x: x.str.contains(busqueda, case=False)).any(axis=1)]
 
     # --- APLICAR ESTILO Y MOSTRAR ---
-    styled_df = df.style.apply(estilo_fila, axis=1)
-    st.dataframe(styled_df, use_container_width=True, height=500, hide_index=True)
+    if not df.empty:
+        styled_df = df.style.apply(estilo_fila, axis=1)
+        st.dataframe(styled_df, use_container_width=True, height=550, hide_index=True)
+    else:
+        st.info("No se encontraron plazas con los filtros seleccionados.")
 
 except Exception as e:
-    st.warning("🔄 Sincronizando datos con la central...")
+    st.error(f"Error en la sincronización: {e}")
 
 # 5. PIE DE PÁGINA Y REFRESCO
 st.markdown('<div class="footer">© 2026 UGEL Cusco - El tablero se refresca automáticamente cada 3s.</div>', unsafe_allow_html=True)
