@@ -32,10 +32,10 @@ def estilo_fila(row):
     
     if valor == 'ADJUDICADA':
         # Rojo claro para toda la fila
-        return ['background-color: #FFFF99; color: #000000'] * len(row)
+        return ['background-color: #FF0000; color: #000000'] * len(row)
     elif valor == 'DISPONIBLE':
         # Verde claro para toda la fila
-        return ['background-color: #6CD900; color: #000000'] * len(row)
+        return ['background-color: ; color: #000000'] * len(row)
     return [''] * len(row)
 
 # 3. CABECERA
