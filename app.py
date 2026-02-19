@@ -97,10 +97,10 @@ st.divider()
 # ============================================================
 # 6. URL DE LA HOJA DE CÁLCULO
 # ============================================================
-URL_SHEET = (
-    "https://docs.google.com/spreadsheets/d/"
-    "1X78ctrqUH58bpjj57ibWucgpGrrw4NAG/edit?usp=sharing"
-)
+#URL_SHEET = (
+#    "https://docs.google.com/spreadsheets/d/"
+#    "1X78ctrqUH58bpjj57ibWucgpGrrw4NAG/edit?usp=sharing"
+#)
 
 # ============================================================
 # 7. CARGA, FILTROS Y TABLA
