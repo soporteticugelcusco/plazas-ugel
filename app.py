@@ -109,20 +109,7 @@ try:
     df_original = cargar_datos(URL_SHEET)
     df = df_original.copy()
 
-    # --- CONTADORES RESUMEN ---
-    col_estado_global = next(
-        (c for c in df.columns if "ESTADO" in c.upper()), None
-    )
-    if col_estado_global:
-        total = len(df)
-        disponibles = (df[col_estado_global].str.strip().str.upper() == "DISPONIBLE").sum()
-        adjudicadas = (df[col_estado_global].str.strip().str.upper() == "ADJUDICADA").sum()
-
-        m1, m2, m3 = st.columns(3)
-        m1.metric("📋 Total de Plazas", total)
-        m2.metric("✅ Disponibles", disponibles, delta=None)
-        m3.metric("🔴 Adjudicadas", adjudicadas, delta=None)
-        st.divider()
+   
 
     # --- FILTROS ---
     st.write("### 🔍 Búsqueda Avanzada")
