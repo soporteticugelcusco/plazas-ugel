@@ -17,9 +17,9 @@ st.set_page_config(
 # ============================================================
 try:
     from streamlit_autorefresh import st_autorefresh
-    st_autorefresh(interval=15_000, limit=None, key="live_refresh")
-    # interval en milisegundos → 15 segundos es suficiente
-    # Google Sheets no necesita actualizarse cada 3 segundos
+    st_autorefresh(interval=5_000, limit=None, key="live_refresh")
+    # interval en milisegundos → 5 segundos
+    # El cache compartido protege Google Sheets sin importar cuántos usuarios haya
 except ImportError:
     st.warning("⚠️ Instala: pip install streamlit-autorefresh")
 
@@ -47,7 +47,7 @@ st.markdown("""
 #    Google Sheets cuando hay muchos usuarios simultáneos.
 #    Todos los usuarios comparten el mismo cache.
 # ============================================================
-@st.cache_data(ttl=30, show_spinner="Sincronizando datos...")
+@st.cache_data(ttl=5, show_spinner="Sincronizando datos...")
 def cargar_datos(url: str) -> pd.DataFrame:
     """
     Carga datos desde Google Sheets.
@@ -88,7 +88,7 @@ with col_titulo:
     st.subheader("UNIDAD DE GESTIÓN EDUCATIVA LOCAL CUSCO")
     st.title("ADJUDICACIÓN DE PLAZAS CONTRATO DOCENTE")
     st.markdown(
-        "<span class='status-live'>● ACTUALIZACIÓN EN VIVO (CADA 15s)</span>",
+        "<span class='status-live'>● ACTUALIZACIÓN EN VIVO (CADA 5s)</span>",
         unsafe_allow_html=True
     )
 
@@ -109,7 +109,20 @@ try:
     df_original = cargar_datos(URL_SHEET)
     df = df_original.copy()
 
-   
+    # --- CONTADORES RESUMEN ---
+    col_estado_global = next(
+        (c for c in df.columns if "ESTADO" in c.upper()), None
+    )
+    if col_estado_global:
+        total = len(df)
+        disponibles = (df[col_estado_global].str.strip().str.upper() == "DISPONIBLE").sum()
+        adjudicadas = (df[col_estado_global].str.strip().str.upper() == "ADJUDICADA").sum()
+
+        m1, m2, m3 = st.columns(3)
+        m1.metric("📋 Total de Plazas", total)
+        m2.metric("✅ Disponibles", disponibles, delta=None)
+        m3.metric("🔴 Adjudicadas", adjudicadas, delta=None)
+        st.divider()
 
     # --- FILTROS ---
     st.write("### 🔍 Búsqueda Avanzada")
